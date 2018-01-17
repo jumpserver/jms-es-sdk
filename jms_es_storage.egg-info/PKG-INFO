@@ -1,0 +1,19 @@
+Metadata-Version: 1.1
+Name: jms-es-storage
+Version: 0.5.1
+Summary: Jumpserver elastic search storage sdk
+Home-page: http://jumpserver.org
+Author: Jumpserver team
+Author-email: ibuler@qq.com
+License: UNKNOWN
+Description-Content-Type: UNKNOWN
+Description: UNKNOWN
+Keywords: jumpserver elastic storage
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6

@@ -5,6 +5,8 @@ import pytz
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
 
+__version__ = '0.5.1'
+
 
 class ESStore:
 
