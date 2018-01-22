@@ -18,19 +18,13 @@ class ESStore:
 
     @staticmethod
     def make_data(command):
-        timestamp = command["timestamp"]
-        if isinstance(timestamp, datetime.datetime) and timestamp.tzinfo != pytz.UTC:
-            timestamp = timestamp.timestamp()
-        if isinstance(timestamp, (int, float)):
-            command["timestamp"] = datetime.datetime.fromtimestamp(
-                timestamp, tz=pytz.UTC
-            )
         data = dict(
             user=command["user"], asset=command["asset"],
             system_user=command["system_user"], input=command["input"],
             output=command["output"], session=command["session"],
             timestamp=command["timestamp"]
         )
+        data["date"] = datetime.datetime.fromtimestamp(command['timestamp'], tz=pytz.UTC)
         return data
 
     def bulk_save(self, command_set, raise_on_error=True):
@@ -40,7 +34,6 @@ class ESStore:
                 _index=self.index,
                 _type=self.doc_type,
                 _source=self.make_data(command),
-                _timestamp=datetime.datetime.utcnow()
             )
             actions.append(data)
         return bulk(self.es, actions, index=self.index, raise_on_error=raise_on_error)
@@ -51,13 +44,16 @@ class ESStore:
         """
         data = self.make_data(command)
         return self.es.index(index=self.index, doc_type=self.doc_type,
-                             body=data, timestamp=datetime.datetime.utcnow())
+                             body=data)
 
     def get_query_body(self, match=None, exact=None, date_from=None, date_to=None):
         if date_to is None:
             date_to = datetime.datetime.now()
         if date_from is None:
             date_from = date_to - datetime.timedelta(days=7)
+
+        time_from = date_from.timestamp()
+        time_to = date_to.timestamp()
 
         body = {
             "query": {
@@ -66,11 +62,16 @@ class ESStore:
                     "filter": [
                         {"range": {
                             "timestamp": {
-                                "gte": date_from,
-                                "lte": date_to,
+                                "gte": time_from,
+                                "lte": time_to,
                             }
                         }}
                     ]
+                }
+            },
+            "sort": {
+                "timestamp": {
+                    "order": "desc"
                 }
             }
         }
@@ -104,6 +105,28 @@ class ESStore:
         body = self.get_query_body(match, exact, date_from, date_to)
         data = self.es.search(index=self.index, doc_type=self.doc_type, body=body)
         return data["hits"]
+
+    def count(self, date_from=None, date_to=None,
+               user=None, asset=None, system_user=None,
+               input=None, session=None):
+        match = {}
+        exact = {}
+
+        if user:
+            exact["user"] = user
+        if asset:
+            exact["asset"] = asset
+        if system_user:
+            exact["system_user"] = system_user
+
+        if session:
+            match["session"] = session
+        if input:
+            match["input"] = input
+        body = self.get_query_body(match, exact, date_from, date_to)
+        del body["sort"]
+        data = self.es.count(body=body)
+        return data["count"]
 
     def __getattr__(self, item):
         return getattr(self.es, item)

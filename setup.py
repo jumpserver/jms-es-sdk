@@ -8,7 +8,7 @@ except ImportError:
     from distutils.core import setup
 
 
-with open('jms_es_storage/__init__.py', 'r') as fd:
+with open('jms_es_sdk/__init__.py', 'r') as fd:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
                         fd.read(), re.MULTILINE).group(1)
 
@@ -20,12 +20,12 @@ with open('README.md', 'rb') as f:
     readme = f.read().decode('utf-8')
 
 setup(
-    name='jms-es-storage',
+    name='jms-es-sdk',
     version=version,
     description='Jumpserver elastic search storage sdk',
     long_description=readme,
     keywords='jumpserver elastic storage',
-    packages=['jms_es_storage'],
+    packages=['jms_es_sdk'],
     author='Jumpserver team',
     author_email='ibuler@qq.com',
     install_requires=[

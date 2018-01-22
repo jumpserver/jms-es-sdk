@@ -1,5 +1,5 @@
 Metadata-Version: 1.1
-Name: jms-es-storage
+Name: jms-es-sdk
 Version: 0.5.1
 Summary: Jumpserver elastic search storage sdk
 Home-page: http://jumpserver.org
