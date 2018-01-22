@@ -1,13 +1,13 @@
 Metadata-Version: 1.1
 Name: jms-es-sdk
-Version: 0.5.1
+Version: 0.5.2
 Summary: Jumpserver elastic search storage sdk
 Home-page: http://jumpserver.org
 Author: Jumpserver team
 Author-email: ibuler@qq.com
 License: UNKNOWN
 Description-Content-Type: UNKNOWN
-Description: UNKNOWN
+Description: README
 Keywords: jumpserver elastic storage
 Platform: UNKNOWN
 Classifier: Development Status :: 5 - Production/Stable
